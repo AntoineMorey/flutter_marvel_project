@@ -15,5 +15,5 @@ abstract class CharacterEndpoint {
   }
 
   @GET("/characters")
-  Future<ResponseDto> getCharacters();
+  Future<ResponseDto> getCharacters({required int offset, required int limit});
 }

@@ -19,7 +19,10 @@ class _CharacterEndpoint implements CharacterEndpoint {
   String? baseUrl;
 
   @override
-  Future<ResponseDto> getCharacters() async {
+  Future<ResponseDto> getCharacters({
+    required offset,
+    required limit,
+  }) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};

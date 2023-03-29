@@ -9,8 +9,8 @@
             "request": "launch",
             "type": "dart",
             "args": [
-                "--dart-define=PRIVATE_KEY=35257e0a988b2ad725bf8b31fe1d19d0025458d8",
-                "--dart-define=PUBLIC_KEY=9a7699a483d541c24f0bc1f97b4eac77",
+                "--dart-define=PRIVATE_KEY=aeca1553ff32cb24e5aafcf801aeba8e5cd8740e",
+                "--dart-define=PUBLIC_KEY=7046dedd8277fa4598a94301da60583f",
                 "--dart-define=API_KEY=cc1952a474bd6ba08844d7255330d469",
             ]
         }

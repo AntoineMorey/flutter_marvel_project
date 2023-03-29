@@ -27,31 +27,25 @@ class HomeContent extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Marvel Characters'),
       ),
-      body: FutureBuilder<List<Character>?>(
-        future: homeViewModel.load(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (snapshot.hasError) {
-            return Center(
-              child: Text('Error: ${snapshot.error}'),
-            );
-          } else if (snapshot.hasData) {
-            final characters = snapshot.data!;
-            return ListView.builder(
-              itemCount: characters.length + 1, // ajouter 1 pour le bouton "Charger plus"
+      body: SingleChildScrollView(
+        controller: homeViewModel.scrollController,
+        child: Column(
+          children: [
+            ListView.builder(
+              physics: NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: homeViewModel.isLoading
+                  ? homeViewModel.charactersList.length + 1
+                  : homeViewModel.charactersList
+                      .length,
               itemBuilder: (context, index) {
-                if (index == characters.length) {
-                  // afficher le bouton "Charger plus" en bas de la liste
-                  return ElevatedButton(
-                    onPressed: () => homeViewModel.load(), // charger la page suivante
-                    child: const Text('Charger plus'),
+                if (index == homeViewModel.charactersList.length) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
                   );
                 } else {
                   // afficher un élément de la liste
-                  final character = characters[index];
+                  final character = homeViewModel.charactersList[index];
                   return ListTile(
                     title: Text(character.name!),
                     leading: CircleAvatar(
@@ -60,17 +54,15 @@ class HomeContent extends StatelessWidget {
                       ),
                     ),
                     trailing: const Icon(Icons.info),
-                    onTap: () {},
+                    onTap: () {
+                      homeViewModel.navigateToDetail(context, index);
+                    },
                   );
-                  }
+                }
               },
-            );
-          } else {
-            return const Center(
-              child: Text('No data'),
-            );
-          }
-        },
+            ),
+          ],
+        ),
       ),
     );
   }

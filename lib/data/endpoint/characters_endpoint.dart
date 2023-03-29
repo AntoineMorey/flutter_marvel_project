@@ -15,5 +15,11 @@ abstract class CharacterEndpoint {
   }
 
   @GET("/characters")
-  Future<ResponseDto> getCharacters({required int offset, required int limit});
+  Future<ResponseDto> getCharacters({@Query("offset") int offset = 0, @Query("limit") int limit = 20});
+
+  @GET("/characters/{id}")
+  Future<ResponseDto> getCharacterById(@Path("id") int id);
+
+  @GET("/characters/{id}/comics")
+  Future<ResponseDto> getCharacterComics(@Path("id") int id);
 }

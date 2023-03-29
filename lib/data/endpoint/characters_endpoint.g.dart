@@ -20,9 +20,35 @@ class _CharacterEndpoint implements CharacterEndpoint {
 
   @override
   Future<ResponseDto> getCharacters({
-    required offset,
-    required limit,
+    offset = 0,
+    limit = 20,
   }) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'offset': offset,
+      r'limit': limit,
+    };
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<ResponseDto>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/characters',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = ResponseDto.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<ResponseDto> getCharacterById(id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -35,7 +61,30 @@ class _CharacterEndpoint implements CharacterEndpoint {
     )
             .compose(
               _dio.options,
-              '/characters',
+              '/characters/${id}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = ResponseDto.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<ResponseDto> getCharacterComics(id) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<ResponseDto>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/characters/${id}/comics',
               queryParameters: queryParameters,
               data: _data,
             )

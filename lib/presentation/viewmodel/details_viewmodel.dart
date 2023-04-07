@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:marvel_app/data/dto/response_dto.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:marvel_app/data/endpoint/characters_endpoint.dart';
 import 'package:marvel_app/data/model/character.dart';
 import 'package:marvel_app/infrastructure/injections/injector.dart';
@@ -8,7 +8,6 @@ import 'package:marvel_app/infrastructure/services/connectivity_service.dart';
 import 'package:provider/provider.dart';
 
 import '../../data/model/comic.dart';
-import '../screen/details.dart';
 
 class DetailsViewModel extends ChangeNotifier {
   final CharacterEndpoint characterEndpoint;
@@ -17,6 +16,7 @@ class DetailsViewModel extends ChangeNotifier {
   Character? character;
   bool isLoading = true;
   List<Comic>? comics;
+  bool isFavorite = false;
 
 
   DetailsViewModel._(this._connectivityServive, {required this.characterEndpoint, required this.characterId});
@@ -42,6 +42,9 @@ class DetailsViewModel extends ChangeNotifier {
       final responseDto = await characterEndpoint.getCharacterById(id);
       final charactersJson = responseDto.data['results'] as List<dynamic>;
       character = charactersJson.map((json) => Character.fromJson(json)).first;
+      await Hive.initFlutter();
+      var box = await Hive.openBox('favorite_spot');
+      isFavorite = box.containsKey(character?.id);
       isLoading = !isLoading;
       notifyListeners();
     } catch (e) {
@@ -57,6 +60,22 @@ class DetailsViewModel extends ChangeNotifier {
       isLoading = !isLoading;
       notifyListeners();
     }catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> setFavorite() async{
+    try{
+      await Hive.initFlutter();
+      var box = await Hive.openBox('favorite_spot');
+      isFavorite = !isFavorite;
+      if(box.containsKey(character?.id)){
+        box.put(character?.id,false);
+      }else{
+        box.put(character?.id,true);
+      }
+      notifyListeners();
+    }catch (e){
       rethrow;
     }
   }

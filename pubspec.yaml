@@ -45,6 +45,8 @@ dependencies:
   lints: ^2.0.1
   connectivity_plus: ^3.0.3
   crypto: ^3.0.2
+  hive_flutter: ^1.1.0
+  hive_generator: ^2.0.0
 
 dev_dependencies:
   flutter_test:

@@ -28,6 +28,22 @@ class DetailsContent extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           title: Text(detailsViewModel.character?.name ?? ""),
+          actions: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(right: 20.0),
+              child: GestureDetector(
+                onTap: () {
+                  detailsViewModel.setFavorite();
+                },
+                child: Icon(
+                  detailsViewModel.isFavorite
+                  ? Icons.favorite
+                  : Icons.favorite_border,
+                  size: 26.0,
+                ),
+              )
+            ),
+          ],
         ),
         body: detailsViewModel.character == null
             ? Center(
